@@ -1,0 +1,24 @@
+<div class="wrap">
+  <div class="wp-box">
+    <h3>Magic Contact Form settings</h3>
+    <form method="post" action="">
+
+      <ul>
+        {% for setting in settings %}
+        <li>
+          {% if setting.label %}
+            <label for="{{ setting.name }}">{{ setting.label }}</label>
+          {% endif %}
+          <input
+            type="{{ setting.type }}"
+            value="{{ setting.value }}"
+            name="{{ setting.name }}"
+            id="{{ setting.name }}"
+          />
+        </li>
+        {% endfor %}
+      </ul>
+      <input type="submit" value="Submit" />
+    </form>
+  </div>
+</div>
