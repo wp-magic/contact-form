@@ -81,7 +81,7 @@ if( function_exists( "magic_register_field_group" ) ) {
 				array (
 					'param' => 'page_template',
 					'operator' => '==',
-					'value' => 'magic-contact-form-page.php',
+					'value' => MAGIC_CONTACT_FORM_PAGE_TEMPLATE,
 					'order_no' => 0,
 					'group_no' => 0,
 				),

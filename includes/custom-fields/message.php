@@ -41,6 +41,16 @@ if( function_exists('magic_register_field_group') ) {
 			'position' => 'normal',
 			'layout' => 'display',
 			'hide_on_screen' => array (
+	      0 => 'permalink',
+	      1 => 'the_content',
+	      2 => 'excerpt',
+	      3 => 'custom_fields',
+	      4 => 'discussion',
+	      5 => 'comments',
+	      6 => 'author',
+	      7 => 'featured_image',
+	      8 => 'categories',
+	      9 => 'tags',
 			),
 		),
 	));
