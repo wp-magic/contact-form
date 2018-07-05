@@ -23,12 +23,18 @@ if ( ! defined( 'WPINC' ) ) {
   die;
 }
 
+define( 'MAGIC_CONTACT_FORM_SLUG', 'magic_cf' );
+define( 'MAGIC_CONTACT_FORM_PAGE_TEMPLATE', 'magic-contact-form-page.php' );
+define( 'MAGIC_CONTACT_FORM_POST_TYPE', 'magic_cf_message' );
+
 // Required files for registering the post type and taxonomies.
 require_once plugin_dir_path( __FILE__ ) . 'includes/plugin.php';
 
-// Instantiate main plugin file, so activation callback does not need to be static.
-$plugin = new Magic_Contact_Form();
-
 // Register callback that is fired when the plugin is activated.
-register_activation_hook( __FILE__, array( $plugin, 'activate' ) );
-register_deactivation_hook( __FILE__, array( $plugin, 'deactivate' ) );
+register_activation_hook( __FILE__, function () {
+  flush_rewrite_rules();
+} );
+
+register_deactivation_hook( __FILE__, function () {
+  flush_rewrite_rules();
+} );
