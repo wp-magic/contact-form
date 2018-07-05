@@ -1,4 +1,4 @@
 <?php
-function magic_cf_enqueue_styles() {
-  wp_enqueue_style( 'magic_cf', plugin_dir_url(__FILE__ ) . 'magic_cf.less', -1 );
-}
+add_action( 'wp_enqueue_scripts', function () {
+  magic_register_style( 'magic-cf', dirname( plugin_basename( __FILE__ ) ) );
+} );
