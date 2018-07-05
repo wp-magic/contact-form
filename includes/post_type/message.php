@@ -37,7 +37,7 @@ function magic_cf_message_post_type() {
     'rewrite'         => array('slug' => __('message', 'magic_cf')),
     'menu_position'   => 30,
     'menu_icon'       => 'dashicons-id',
-    'show_in_menu'    => 'magic-dashboard',
+    'show_in_menu'    => MAGIC_DASHBOARD_SLUG,
     'public' => true,  // it's not public, it shouldn't have it's own permalink, and so on
     'publicly_queryable' => true,  // you should be able to query it
     'show_ui' => true,  // you should be able to edit it in wp-admin
@@ -54,7 +54,7 @@ function magic_cf_message_post_type() {
     //   'read_private_posts' => 'read_private_messages',
     //   'delete_post' => 'delete_message'
     // ),
-    'map_meta_cap' => true,
+    // 'map_meta_cap' => true,
   );
 
   register_post_type( 'magic_cf_message', $args );
