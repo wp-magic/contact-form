@@ -1,7 +1,7 @@
 {% extends "base.twig" %}
 
 {% block content %}
-  {{ post }}
+  <h3>{{ post.title }}</h3>
   {% if _REQUEST.success %}
     {% if post.success_message %}
       <div class="success">{{ post.success_message }}</div>
@@ -38,7 +38,7 @@
           {% if form.error == 'content' and post.error_content %}
             <div class="error">{{ post.error_content }}</div>
           {% endif %}
-          <textarea name="content" placeholder="{{ post.message_placeholder }}">{{ _REQUEST.message }}</textarea>
+          <textarea name="content" rows="10" placeholder="{{ post.message_placeholder }}">{{ _REQUEST.message }}</textarea>
         </li>
         <li>
           <input type="submit" value="{{ post.submit_text }}" />
