@@ -43,7 +43,7 @@ if( function_exists( "magic_register_field_group" ) ) {
 				'type' => 'wysiwyg',
 				'default_value' => 'Message sent successfully. We will get back to you as soon as possible.',
 			),
-			'below_form' => array (
+			'below_text' => array (
 				'label' => 'Text below form',
 				'type' => 'wysiwyg',
 			),
