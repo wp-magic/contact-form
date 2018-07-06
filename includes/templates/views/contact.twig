@@ -23,7 +23,7 @@
 
       <ul>
         <li>
-          <input type="text" name="name" placeholder="{{ post.name_placeholder }}" value="{% if _REQUEST.name %}{{ _REQUEST.name }}{% else %}{{ name }}{% endif %}" />
+          <input type="text" name="username" placeholder="{{ post.name_placeholder }}" value="{% if _REQUEST.username %}{{ _REQUEST.username }}{% else %}{{ name }}{% endif %}" />
         </li>
         <li>
           {% if form.error == 'email' and post.error_email %}
