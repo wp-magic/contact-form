@@ -1,5 +1,8 @@
 <?php
 
+add_action( 'admin_post_nopriv_' . MAGIC_CONTACT_FORM_SEND_ACTION, 'magic_cf_send' );
+add_action( 'admin_post_' . MAGIC_CONTACT_FORM_SEND_ACTION, 'magic_cf_send' );
+
 function magic_cf_send() {
   $ref = $_SERVER['HTTP_REFERER'];
 
@@ -9,10 +12,10 @@ function magic_cf_send() {
 
   $content = sanitize_post_field( 'content', trim( $_POST['content'] ), 'db' );
   $subject = sanitize_post_field( 'post_title', trim( $_POST['subject'] ), 'db' );
-  $name = esc_attr( trim( $_POST['name'] ) );
+  $name = esc_attr( trim( $_POST['username'] ) );
   $email = esc_attr( trim( $_POST['email'] ) );
 
-  if( !wp_verify_nonce( $_POST['nonce'], 'magic_cf_send' ) ) {
+  if( !wp_verify_nonce( $_POST['nonce'], MAGIC_CONTACT_FORM_SEND_ACTION ) ) {
     $error = 'nonce';
   } else if ( empty( $email ) ) {
     $error = 'email';
@@ -24,9 +27,9 @@ function magic_cf_send() {
     $ref = add_query_arg( 'error', $error, $ref );
 
     $ref = add_query_arg( 'email', $email, $ref );
-    $ref = add_query_arg( 'message', $post['content'], $ref );
+    $ref = add_query_arg( 'message', $_POST['content'], $ref );
     $ref = add_query_arg( 'subject', $subject, $ref );
-    $ref = add_query_arg( 'name', $name, $ref );
+    $ref = add_query_arg( 'username', $name, $ref );
 
     wp_redirect( $ref );
     exit;
@@ -39,12 +42,6 @@ function magic_cf_send() {
   }
 
   $post_id = wp_insert_post( $post, true );
-  $update_id = wp_update_post($post_id, array( 'post_title' => $post_id ) );
-
-  add_post_meta( $post_id, 'name', $name );
-  add_post_meta( $post_id, 'email', $email );
-  add_post_meta( $post_id, 'subject', $subject );
-  add_post_meta( $post_id, 'content', $content );
 
   if (is_wp_error( $post_id ) ) {
     $ref = add_query_arg( 'error', 'insert', $ref );
@@ -52,11 +49,18 @@ function magic_cf_send() {
     $ref = add_query_arg( 'email', $email, $ref );
     $ref = add_query_arg( 'message', $content, $ref );
     $ref = add_query_arg( 'subject', $subject, $ref );
-    $ref = add_query_arg( 'name', $name, $ref );
+    $ref = add_query_arg( 'username', $name, $ref );
 
     wp_redirect( $ref );
     exit;
   }
+
+  $update_id = wp_update_post($post_id, array( 'post_title' => $post_id ) );
+
+  add_post_meta( $post_id, 'name', $name );
+  add_post_meta( $post_id, 'email', $email );
+  add_post_meta( $post_id, 'subject', $subject );
+  add_post_meta( $post_id, 'content', $content );
 
   $ref = add_query_arg( 'success', true, $ref );
 

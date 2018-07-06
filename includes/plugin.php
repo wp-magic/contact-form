@@ -25,8 +25,6 @@ add_action( 'init', function () {
 } );
 
 require_once 'post/contact.php';
-add_action( 'admin_post_nopriv_magic_cf_send', 'magic_cf_send' );
-add_action( 'admin_post_magic_cf_send', 'magic_cf_send' );
 
 require_once 'styles/index.php';
 
