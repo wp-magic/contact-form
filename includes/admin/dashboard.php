@@ -22,6 +22,12 @@ add_action( 'admin_menu', function () {
       'default' => '',
       'label' => 'Mail sent from name',
     ),
+    array(
+      'name' => 'magic_cf_send_redirect',
+      'type' => 'text',
+      'default' => '',
+      'label' => 'Where to connect the user to after sending the form. Empty value returns to contact form',
+    ),
   );
 
   magic_dashboard_add_submenu_page( array (
