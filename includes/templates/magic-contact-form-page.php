@@ -13,8 +13,8 @@ $context['post'] = new TimberPost();
 
 $context['form'] = array(
   'url' => esc_url( admin_url('admin-post.php') ),
-  'action' => 'magic_cf_send',
-  'nonce' => wp_create_nonce('magic_cf_send'),
+  'action' => MAGIC_CONTACT_FORM_SEND_ACTION,
+  'nonce' => wp_create_nonce( MAGIC_CONTACT_FORM_SEND_ACTION ),
 );
 
 $context['_REQUEST'] = $_REQUEST;

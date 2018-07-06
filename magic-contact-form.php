@@ -26,6 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'MAGIC_CONTACT_FORM_SLUG', 'magic_cf' );
 define( 'MAGIC_CONTACT_FORM_PAGE_TEMPLATE', 'magic-contact-form-page.php' );
 define( 'MAGIC_CONTACT_FORM_POST_TYPE', 'magic_cf_message' );
+define( 'MAGIC_CONTACT_FORM_SEND_ACTION', 'magic_cf_send' );
 
 // Required files for registering the post type and taxonomies.
 require_once plugin_dir_path( __FILE__ ) . 'includes/plugin.php';
