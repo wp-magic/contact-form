@@ -11,7 +11,8 @@
  *
  * @link http://codex.wordpress.org/Function_Reference/register_post_type
  */
-function magic_cf_message_post_type() {
+
+add_action( 'init', function () {
   $labels = array(
     'name'               => __( 'Messages', 'magic_cf' ),
     'singular_name'      => __( 'Message', 'magic_cf' ),
@@ -37,7 +38,7 @@ function magic_cf_message_post_type() {
     'rewrite'         => array('slug' => __('message', 'magic_cf')),
     'menu_position'   => 30,
     'menu_icon'       => 'dashicons-id',
-    'show_in_menu'    => MAGIC_DASHBOARD_SLUG,
+    // 'show_in_menu'    => MAGIC_DASHBOARD_SLUG,
     'public' => true,  // it's not public, it shouldn't have it's own permalink, and so on
     'publicly_queryable' => true,  // you should be able to query it
     'show_ui' => true,  // you should be able to edit it in wp-admin
@@ -57,8 +58,8 @@ function magic_cf_message_post_type() {
     // 'map_meta_cap' => true,
   );
 
-  register_post_type( 'magic_cf_message', $args );
-}
+  register_post_type( MAGIC_CONTACT_FORM_POST_TYPE, $args );
+} );
 
   // /**
   //  * Register a taxonomy for Message Categories.
@@ -99,5 +100,5 @@ function magic_cf_message_post_type() {
   //
   //   $args = apply_filters( 'message_post_type_category_args', $args );
   //
-  //   register_taxonomy( $this->taxonomy, $this->post_type, $args );
+  //   register_taxonomy( $this->taxonomy, MAGIC_CONTACT_FORM_POST_TYPE, $args );
   // }

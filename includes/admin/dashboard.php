@@ -31,9 +31,10 @@ add_action( 'admin_menu', function () {
   );
 
   magic_dashboard_add_submenu_page( array (
-    'link' => 'Contact Form',
+    'link' => 'Settings',
     'slug' => MAGIC_CONTACT_FORM_SLUG,
     'title' => $title,
     'settings' => $settings,
+    'parent' => 'edit.php?post_type=' . MAGIC_CONTACT_FORM_POST_TYPE,
    ) );
-} );
+}, 2 );
