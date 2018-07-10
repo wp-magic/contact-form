@@ -7,7 +7,8 @@ function magic_cf_send() {
   $ref = $_SERVER['HTTP_REFERER'];
 
   $post = array(
-    'post_type' => 'magic_cf_message'
+    'post_type' => MAGIC_CONTACT_FORM_POST_TYPE,
+    'post_title' => $_POST['subject'],
   );
 
   $content = sanitize_post_field( 'content', trim( $_POST['content'] ), 'db' );
