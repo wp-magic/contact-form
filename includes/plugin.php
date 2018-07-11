@@ -6,7 +6,6 @@
  * @license   GPL-2.0+
  */
 
-require_once 'post/contact.php';
 require_once 'styles/index.php';
 require_once 'post_type/message.php';
 
@@ -16,15 +15,15 @@ if ( is_admin() ) {
 }
 
 add_action( 'plugins_loaded', function () {
-	if ( function_exists( 'magic_page_templates' ) ) {
-		$templates = array(
-			MAGIC_CONTACT_FORM_PAGE_TEMPLATE => 'Contact Page',
-		);
+  if ( function_exists( 'magic_page_templates' ) ) {
+    $templates = array(
+      MAGIC_CONTACT_FORM_PAGE_TEMPLATE => 'Contact Page',
+    };
 
-		magic_page_templates($templates, plugin_dir_path( __FILE__ ) . 'templates/');
+    magic_page_templates($templates, plugin_dir_path( __FILE__ ) . 'templates/');
 
-		require_once 'custom-fields/index.php';
-	}
+    require_once 'custom-fields/index.php';
+  }
 } );
 
 // Load plugin text domain
