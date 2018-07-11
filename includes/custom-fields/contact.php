@@ -13,7 +13,7 @@ if( function_exists( "magic_register_field_group" ) ) {
 				'label' => 'Text above form',
 				'type' => 'wysiwyg',
 			),
-			'name_placeholder' => array (
+			'username_placeholder' => array (
 				'label' => 'name placeholder text',
 				'type' => 'text',
 				'default_value' => 'Your name',
@@ -28,10 +28,10 @@ if( function_exists( "magic_register_field_group" ) ) {
 				'type' => 'text',
 				'default_value' => 'Subject',
 			),
-			'message_placeholder' => array (
-				'label' => 'message placeholder text',
+			'content_placeholder' => array (
+				'label' => 'content placeholder text',
 				'type' => 'text',
-				'default_value' => 'Message',
+				'default_value' => 'Your message',
 			),
 			'submit_text' => array (
 				'label' => 'submit button text',
@@ -47,6 +47,7 @@ if( function_exists( "magic_register_field_group" ) ) {
 				'label' => 'Text below form',
 				'type' => 'wysiwyg',
 			),
+
 			'tab_form_errors' => array (
 				'label' => 'Form Errors',
 				'type' => 'tab',
@@ -74,6 +75,18 @@ if( function_exists( "magic_register_field_group" ) ) {
 				'type' => 'text',
 				'default_value' => 'An error happened when sending your message. Please try again later.',
 				'instructions' => 'Shown if there is a wordpress error when inserting the message',
+			),
+			'error_send_team' => array (
+				'label' => 'Sending team email failed.',
+				'type' => 'text',
+				'default_value' => 'An error happened when sending your message to us.',
+				'instructions' => 'Shown if there is a wordpress error when sending the message to the team.',
+			),
+			'error_send_customer' => array (
+				'label' => 'Send customer confirmation',
+				'type' => 'text',
+				'default_value' => 'Sending the confirmation email to you failed. We still received your message but this probably means your email was wrong.',
+				'instructions' => 'Shown if there is a wordpress error when sending the mail to the customer',
 			),
 		),
 		'location' => array (
