@@ -1,40 +1,26 @@
 <?php
 
-add_action( 'admin_post_nopriv_' . MAGIC_CONTACT_FORM_SEND_ACTION, 'magic_cf_send' );
-add_action( 'admin_post_' . MAGIC_CONTACT_FORM_SEND_ACTION, 'magic_cf_send' );
+// add_action( 'admin_post_nopriv_' . MAGIC_CONTACT_FORM_SEND_ACTION, 'magic_cf_send' );
+// add_action( 'admin_post_' . MAGIC_CONTACT_FORM_SEND_ACTION, 'magic_cf_send' );
 
-function magic_cf_send() {
-  $ref = $_SERVER['HTTP_REFERER'];
+function magic_cf_send_message( array $context = [] ) {
+  $arguments = array(
+    'content' => 'missing_content',
+    'subject' => 'missing_subject',
+    'email' => 'missing_email',
+    'username' => false,
+  );
+
+  $context = magic_parse_arguments( $arguments, $context );
+
+  if ( !empty( $context['errors'] ) ) {
+    return $context;
+  }
 
   $post = array(
     'post_type' => MAGIC_CONTACT_FORM_POST_TYPE,
     'post_title' => $_POST['subject'],
   );
-
-  $content = sanitize_post_field( 'content', trim( $_POST['content'] ), 'db' );
-  $subject = sanitize_post_field( 'post_title', trim( $_POST['subject'] ), 'db' );
-  $name = esc_attr( trim( $_POST['username'] ) );
-  $email = esc_attr( trim( $_POST['email'] ) );
-
-  if( !wp_verify_nonce( $_POST['nonce'], MAGIC_CONTACT_FORM_SEND_ACTION ) ) {
-    $error = 'nonce';
-  } else if ( empty( $email ) ) {
-    $error = 'email';
-  } else if ( empty( $subject ) && empty( $content ) ) {
-    $error = 'content';
-  }
-
-  if ( !empty( $error ) ) {
-    $ref = add_query_arg( 'error', $error, $ref );
-
-    $ref = add_query_arg( 'email', $email, $ref );
-    $ref = add_query_arg( 'message', $_POST['content'], $ref );
-    $ref = add_query_arg( 'subject', $subject, $ref );
-    $ref = add_query_arg( 'username', $name, $ref );
-
-    wp_redirect( $ref );
-    exit;
-  }
 
   if ( $user = get_current_user_id() ) {
     $post['post_author'] = $user;
@@ -42,48 +28,66 @@ function magic_cf_send() {
     $post['post_author'] = $user->ID;
   }
 
-  $post_id = wp_insert_post( $post, true );
-
-  if (is_wp_error( $post_id ) ) {
-    $ref = add_query_arg( 'error', 'insert', $ref );
-
-    $ref = add_query_arg( 'email', $email, $ref );
-    $ref = add_query_arg( 'message', $content, $ref );
-    $ref = add_query_arg( 'subject', $subject, $ref );
-    $ref = add_query_arg( 'username', $name, $ref );
-
-    wp_redirect( $ref );
-    exit;
+  if ( !empty( $user ) ) {
+    $context['user'] = $user;
   }
 
-  $update_id = wp_update_post($post_id, array( 'post_title' => $post_id ) );
+  $post_id = wp_insert_post( $post, true );
 
-  add_post_meta( $post_id, 'name', $name );
-  add_post_meta( $post_id, 'email', $email );
-  add_post_meta( $post_id, 'subject', $subject );
-  add_post_meta( $post_id, 'content', $content );
+  if ( is_wp_error( $post_id ) ) {
+    $context['errors'][] = 'insert';
+    return $context;
+  }
 
-  $ref = add_query_arg( 'success', true, $ref );
+  $post['title'] = $post_id;
+  $post['ID'] = $post_id;
+
+  $update_id = wp_update_post( $post );
+
+  if ( is_wp_error( $update_id ) ) {
+    $context['errors'][] = 'insert';
+    return $context;
+  }
+
+  add_post_meta( $post_id, 'name', $context['query']['username'] );
+  add_post_meta( $post_id, 'email', $context['query']['email'] );
+  add_post_meta( $post_id, 'subject', $context['query']['subject'] );
+  add_post_meta( $post_id, 'content', $context['query']['content'] );
 
   $from_name = magic_get_option('magic_contact_form_from_name');
   $from_email = magic_get_option('magic_contact_form_from_email');
 
   $headers = array(
     'From: ' . $from_name . ' <' . $from_email . '>',
+    // 'Content-type: text/html',
   );
 
   $sent = wp_mail( $email, $subject, $content, $headers );
 
-  if (!$sent) {
+  // $mail_content = Timber::compile_string( 'teststring {{ test }} ', array( 'test' => 'yes' ) );
+  // print($mail_content);
+  // exit;
+
+  if ( !$sent || is_wp_error( $sent ) ) {
     // error sending email.
+    // we do not want to show these here,
+    // instead there is an add_action in the plugin.php
+    // $context['errors'][] = 'send_customer';
   }
 
   $sent_to_team = wp_mail( $from_email, $subject, $content, $headers );
 
   if (!$sent_to_team) {
     // error sending team email
+    // we do not want to show these here,
+    // instead there is an add_action in the plugin.php
+    // $context['errors'][] = 'send_team';
   }
 
-  wp_redirect( magic_get_option( 'magic_cf_send_redirect', $ref ) );
-  exit;
+  if ( empty( $context['errors'] ) ) {
+    $context['success'] = true;
+  }
+
+
+  return $context;
 }
