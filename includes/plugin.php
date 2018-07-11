@@ -18,7 +18,7 @@ add_action( 'plugins_loaded', function () {
   if ( function_exists( 'magic_page_templates' ) ) {
     $templates = array(
       MAGIC_CONTACT_FORM_PAGE_TEMPLATE => 'Contact Page',
-    };
+    );
 
     magic_page_templates($templates, plugin_dir_path( __FILE__ ) . 'templates/');
 
