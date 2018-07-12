@@ -58,17 +58,23 @@ if( function_exists( "magic_register_field_group" ) ) {
 				'default_value' => 'Nonce error. Please retry.',
 				'instructions' => 'nonces are a security feature. If they error it likely means that we have a cross site request forgery going on.',
 			),
-			'error_email' => array (
+			'error_missing_email' => array (
 				'label' => 'Email Missing Text',
 				'type' => 'text',
 				'default_value' => 'Email missing',
 				'instructions' => 'Shown if the user adds no email to the form',
 			),
-			'error_content' => array (
+			'error_missing_content' => array (
 				'label' => 'Content Missing Text',
 				'type' => 'text',
 				'default_value' => 'Content missing',
-				'instructions' => 'Shown if the user inputs neither subject nor message',
+				'instructions' => 'Shown if the user inputs no message',
+			),
+			'error_missing_subject' => array (
+				'label' => 'Content Missing Text',
+				'type' => 'text',
+				'default_value' => 'Subject missing',
+				'instructions' => 'Shown if the user inputs no subject',
 			),
 			'error_insert' => array (
 				'label' => 'Insert Post failed text',
