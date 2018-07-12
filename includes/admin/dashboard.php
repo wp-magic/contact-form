@@ -6,24 +6,24 @@ add_action( 'admin_menu', function () {
   $settings = array(
     array(
       'type' => 'header',
-      'name' => 'from_email_header',
+      'name' => 'email_header',
       'value' => 'From Email Settings',
       'label' => 'This sets the email that replies to contact form mails',
     ),
     array(
-      'name' => 'magic_contact_form_from_email',
+      'name' => 'from_email',
       'type' => 'text',
       'default' => '',
       'label' => 'Mail sent from email',
     ),
     array(
-      'name' => 'magic_contact_form_from_name',
+      'name' => 'from_name',
       'type' => 'text',
       'default' => '',
       'label' => 'Mail sent from name',
     ),
     array(
-      'name' => 'magic_cf_send_redirect',
+      'name' => 'send_redirect',
       'type' => 'text',
       'default' => '',
       'label' => 'Where to connect the user to after sending the form. Empty value returns to contact form',
