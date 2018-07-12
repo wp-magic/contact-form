@@ -24,7 +24,7 @@ function magic_cf_send_message( array $context = [] ) {
 
   if ( $user = get_current_user_id() ) {
     $post['post_author'] = $user;
-  } else if ( $user = get_user_by( 'email', $email ) ) {
+  } else if ( $user = get_user_by( 'email', $context['query']['email'] ) ) {
     $post['post_author'] = $user->ID;
   }
 
@@ -54,11 +54,13 @@ function magic_cf_send_message( array $context = [] ) {
   add_post_meta( $post_id, 'subject', $context['query']['subject'] );
   add_post_meta( $post_id, 'content', $context['query']['content'] );
 
-  $from_name = magic_get_option('magic_contact_form_from_name');
-  $from_email = magic_get_option('magic_contact_form_from_email');
+  $from_name = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_from_name' );
+  $from_email = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_from_email' );
+
+  $from_string = 'From: ' . $from_name . ' &lt;' . $from_email . '&gt;';
 
   $headers = array(
-    'From: ' . $from_name . ' <' . $from_email . '>',
+    $from_string,
     // 'Content-type: text/html',
   );
 
@@ -72,13 +74,15 @@ function magic_cf_send_message( array $context = [] ) {
   );
 
   $customer_email_subject = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_customer_email_subject' );
+  $customer_email_subject = Timber::compile_string( $customer_email_subject, $email_ctx );
+
   $customer_email_text = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_customer_email_text' );
 
   $customer_mail_content = Timber::compile_string( $customer_email_text, $email_ctx );
   $customer_mail_content = str_replace( '<br>', '\n', $customer_mail_content );
 
   $sent = wp_mail(
-    $email,
+    $context['query']['email'],
     $customer_email_subject,
     $customer_mail_content,
     $headers
@@ -92,6 +96,7 @@ function magic_cf_send_message( array $context = [] ) {
   }
 
   $team_email_subject = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_team_email_subject' );
+  $team_email_subject = Timber::compile_string( $customer_email_subject, $email_ctx );
   $team_email_text = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_team_email_text' );
 
   $team_mail_content = Timber::compile_string( $team_email_text, $email_ctx );
