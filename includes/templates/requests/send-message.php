@@ -62,11 +62,27 @@ function magic_cf_send_message( array $context = [] ) {
     // 'Content-type: text/html',
   );
 
-  $sent = wp_mail( $email, $subject, $content, $headers );
+  $email_ctx = array(
+    'customer_email' => $context['query']['email'],
+    'customer_name' => !empty( $context['query']['username'] )
+      ? $context['query']['username']
+      : $context['query']['email'],
+    'email_subject' => $context['query']['subject'],
+    'email_content' => $context['query']['content'],
+  );
 
-  // $mail_content = Timber::compile_string( 'teststring {{ test }} ', array( 'test' => 'yes' ) );
-  // print($mail_content);
-  // exit;
+  $customer_email_subject = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_customer_email_subject' );
+  $customer_email_text = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_customer_email_text' );
+
+  $customer_mail_content = Timber::compile_string( $customer_email_text, $email_ctx );
+  $customer_mail_content = str_replace( '<br>', '\n', $customer_mail_content );
+
+  $sent = wp_mail(
+    $email,
+    $customer_email_subject,
+    $customer_mail_content,
+    $headers
+  );
 
   if ( !$sent || is_wp_error( $sent ) ) {
     // error sending email.
@@ -75,7 +91,18 @@ function magic_cf_send_message( array $context = [] ) {
     // $context['errors'][] = 'send_customer';
   }
 
-  $sent_to_team = wp_mail( $from_email, $subject, $content, $headers );
+  $team_email_subject = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_team_email_subject' );
+  $team_email_text = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_team_email_text' );
+
+  $team_mail_content = Timber::compile_string( $team_email_text, $email_ctx );
+  $team_mail_content = str_replace( '<br>', '\n', $team_mail_content );
+
+  $sent_to_team = wp_mail(
+    $from_email,
+    $team_email_subject,
+    $team_mail_content,
+    $headers
+  );
 
   if (!$sent_to_team) {
     // error sending team email
@@ -87,7 +114,6 @@ function magic_cf_send_message( array $context = [] ) {
   if ( empty( $context['errors'] ) ) {
     $context['success'] = true;
   }
-
 
   return $context;
 }
