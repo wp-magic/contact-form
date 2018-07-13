@@ -35,7 +35,10 @@ add_action( 'init', function () {
   );
 } );
 
-// add the action
-add_action('wp_mail_failed', function ($wp_error) {
-  return error_log(print_r($wp_error, true));
-}, 10, 1);
+add_filter( 'wp_mail_from_name', function ( $original_email_from ) {
+	return magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_from_name' );
+} );
+
+add_filter( 'wp_mail_from', function ( $original_email_from ) {
+	return magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_from_email' );
+} );
