@@ -20,6 +20,7 @@ function magic_cf_send_message( array $context = [] ) {
   $post = array(
     'post_type' => MAGIC_CONTACT_FORM_POST_TYPE,
     'post_title' => $_POST['subject'],
+    'post_status' => 'public',
   );
 
   if ( $user = get_current_user_id() ) {
@@ -54,15 +55,16 @@ function magic_cf_send_message( array $context = [] ) {
   add_post_meta( $post_id, 'subject', $context['query']['subject'] );
   add_post_meta( $post_id, 'content', $context['query']['content'] );
 
+
+  if ( function_exists( 'ThreeWP_Broadcast' ) ) {
+    ThreeWP_Broadcast()->api()->broadcast_children( $post_id, [ 1, 2 ] );
+  }
+
   $from_name = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_from_name' );
   $from_email = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_from_email' );
 
-  $from_string = 'From: ' . $from_name . ' &lt;' . $from_email . '&gt;';
-
-  $headers = array(
-    $from_string,
-    // 'Content-type: text/html',
-  );
+  $headers = 'MIME-Version: 1.0\r\n' .
+    'Content-Type: text/plain; charset="' . get_option('blog_charset') . '"\r\n';
 
   $email_ctx = array(
     'customer_email' => $context['query']['email'],
@@ -77,14 +79,12 @@ function magic_cf_send_message( array $context = [] ) {
   $customer_email_subject = Timber::compile_string( $customer_email_subject, $email_ctx );
 
   $customer_email_text = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_customer_email_text' );
-
-  $customer_mail_content = Timber::compile_string( $customer_email_text, $email_ctx );
-  $customer_mail_content = str_replace( '<br>', '\n', $customer_mail_content );
+  $customer_email_content = Timber::compile_string( $customer_email_text, $email_ctx );
 
   $sent = wp_mail(
     $context['query']['email'],
     $customer_email_subject,
-    $customer_mail_content,
+    $customer_email_content,
     $headers
   );
 
@@ -97,15 +97,14 @@ function magic_cf_send_message( array $context = [] ) {
 
   $team_email_subject = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_team_email_subject' );
   $team_email_subject = Timber::compile_string( $customer_email_subject, $email_ctx );
-  $team_email_text = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_team_email_text' );
 
-  $team_mail_content = Timber::compile_string( $team_email_text, $email_ctx );
-  $team_mail_content = str_replace( '<br>', '\n', $team_mail_content );
+  $team_email_text = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_team_email_text' );
+  $team_email_content = Timber::compile_string( $team_email_text, $email_ctx );
 
   $sent_to_team = wp_mail(
     $from_email,
     $team_email_subject,
-    $team_mail_content,
+    $team_email_content,
     $headers
   );
 
