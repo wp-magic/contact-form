@@ -15,25 +15,25 @@ You can use variables in this textarea:
 </ul>';
 
 $team_email_text = '
-Contact request received from: <br>
-{{ customer_name}}<{{ customer_email }}><br>
-<br>
-Subject:<br>
-{{ email_subject }}<br>
-<br>
-Content:<br>
-{{ email_content }}<br>
+Contact request received from:
+{{ customer_name}}<{{ customer_email }}>
+
+Subject:
+{{ email_subject }}
+
+Content:
+{{ email_content }}
 ';
 
   $customer_email_text = '
-Hi, {{ customer_name }}.<br>
-<br>
-We got your email regarding {{ email_subject }}.<br>
-<br>
-Our team is on it and we will get back to you as soon as possible.<br>
-<br>
-Kind regards,<br>
-ACME company Team<br>
+Hi, {{ customer_name }}.
+
+We got your email regarding {{ email_subject }}.
+
+Our team is on it and we will get back to you as soon as possible.
+
+Kind regards,
+ACME company Team
 ';
   $settings = array(
     array(
