@@ -4,8 +4,6 @@ add_action( 'admin_menu', function () {
   $title = 'Magic Contact Form Settings';
 
   $instructions = '
-Every line has to end with a &lt;br&gt; tag.
-
 You can use variables in this textarea:
 <ul>
   <li>{{ customer_email }} - email of the customer</li>
@@ -35,6 +33,7 @@ Our team is on it and we will get back to you as soon as possible.
 Kind regards,
 ACME company Team
 ';
+
   $settings = array(
     array(
       'type' => 'header',
@@ -60,7 +59,9 @@ ACME company Team
       'default' => '',
       'label' => 'Where to connect the user to after sending the form. Empty value returns to contact form',
     ),
+  );
 
+  $email_fields = array (
     array(
       'name' => 'customer_email_subject',
       'type' => 'text',
@@ -93,11 +94,22 @@ ACME company Team
     ),
   );
 
-  magic_dashboard_add_submenu_page( array (
+  $submenu_config = array (
     'link' => 'Settings',
     'slug' => MAGIC_CONTACT_FORM_SLUG,
     'title' => $title,
     'settings' => $settings,
     'parent' => 'edit.php?post_type=' . MAGIC_CONTACT_FORM_POST_TYPE,
-   ) );
+  );
+
+  $email_submenu_config = array (
+    'link' => 'Emails',
+    'slug' => MAGIC_CONTACT_FORM_SLUG . '_emails',
+    'title' => 'Emails',
+    'settings' => $email_fields,
+    'parent' => 'edit.php?post_type=' . MAGIC_CONTACT_FORM_POST_TYPE,
+  );
+
+  magic_dashboard_add_submenu_page( $email_submenu_config );
+  magic_dashboard_add_submenu_page( $submenu_config );
 }, 2 );
