@@ -32,6 +32,10 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/plugin.php';
 
 // Register callback that is fired when the plugin is activated.
 register_activation_hook( __FILE__, function () {
+//  require_once 'includes/db/db.php';
+//  $db = new Magic_Appointment_DB;
+//  $db->create_table();
+
   flush_rewrite_rules();
 } );
 
