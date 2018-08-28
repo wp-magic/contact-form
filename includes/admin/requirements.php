@@ -4,9 +4,7 @@
  * @version    0.0.1
  */
 
-add_action( 'magic_pa_register', 'magic_cf_register_required_plugins' );
-
-function magic_cf_register_required_plugins() {
+add_action( 'magic_pa_register', function () {
  	$plugins = array(
  	 	array(
 	 		'name'      => 'Timber',
@@ -44,4 +42,4 @@ function magic_cf_register_required_plugins() {
 	);
 
 	magic_pa( $plugins, $config );
-}
+} );
