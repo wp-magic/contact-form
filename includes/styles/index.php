@@ -1,4 +1,11 @@
 <?php
+/**
+ * Enqueue the css styles for this plugin
+ *
+ * @package MagicContactForm
+ * @since 0.0.1
+ */
+
 add_action(
 	'wp_enqueue_scripts',
 	function () {

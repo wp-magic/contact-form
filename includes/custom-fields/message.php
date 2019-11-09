@@ -1,4 +1,11 @@
 <?php
+/**
+ * Add Admin Custom Fields for Magic Contact Form Message
+ *
+ * @package MagicContactForm
+ * @since 0.0.1
+ */
+
 if ( function_exists( 'magic_register_field_group' ) ) {
 	magic_register_field_group(
 		array(

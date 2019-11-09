@@ -1,4 +1,10 @@
 <?php
+/**
+ * Add the Contact Form Admin Dashboard
+ *
+ * @package MagicContactForm
+ * @since 0.0.1
+ */
 
 add_action(
 	'admin_menu',

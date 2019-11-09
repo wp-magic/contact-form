@@ -1,9 +1,22 @@
 <?php
+/**
+ * Actually send a message from a user
+ *
+ * @package MagicContactForm
+ * @since 0.0.1
+ */
 
-// add_action( 'admin_post_nopriv_' . MAGIC_CONTACT_FORM_SEND_ACTION, 'magic_cf_send' );
-// add_action( 'admin_post_' . MAGIC_CONTACT_FORM_SEND_ACTION, 'magic_cf_send' );
-
-function magic_cf_send_message( array $context = [] ) {
+/**
+ * Actually send a message.
+ *
+ * @since 0.0.1
+ *
+ * @param array $context timber context.
+ * @param array $request $_POST data.
+ *
+ * @return array $context timber context enhanced by email results.
+ */
+function magic_cf_send_message( array $context = [], array $request = [] ) {
 	$arguments = array(
 		'content'  => 'missing_content',
 		'subject'  => 'missing_subject',
@@ -19,14 +32,20 @@ function magic_cf_send_message( array $context = [] ) {
 
 	$post = array(
 		'post_type'   => MAGIC_CONTACT_FORM_POST_TYPE,
-		'post_title'  => $_POST['subject'],
+		'post_title'  => $request['subject'],
 		'post_status' => 'public',
 	);
 
-	if ( $user = get_current_user_id() ) {
+	$user_id = get_current_user_id();
+
+	if ( ! empty( $user_id ) ) {
 		$post['post_author'] = $user;
-	} elseif ( $user = get_user_by( 'email', $context['query']['email'] ) ) {
-		$post['post_author'] = $user->ID;
+	} else {
+		$user_by_email = get_user_by( 'email', $context['query']['email'] );
+
+		if ( ! empty( $user_by_email ) ) {
+			$post['post_author'] = $user->ID;
+		}
 	}
 
 	if ( ! empty( $user ) ) {
@@ -65,13 +84,18 @@ function magic_cf_send_message( array $context = [] ) {
 	$headers = 'MIME-Version: 1.0\r\n' .
 	'Content-Type: text/plain; charset="' . get_option( 'blog_charset' ) . '"\r\n';
 
+	$query = $context['query'];
+
+	$email    = $query['email'];
+	$username = $query['username'];
+	$subject  = $query['subject'];
+	$content  = $query['content'];
+
 	$email_ctx = array(
-		'customer_email' => $context['query']['email'],
-		'customer_name'  => ! empty( $context['query']['username'] )
-		  ? $context['query']['username']
-		  : $context['query']['email'],
-		'email_subject'  => $context['query']['subject'],
-		'email_content'  => $context['query']['content'],
+		'customer_email' => $email,
+		'customer_name'  => ! empty( $username ) ? $username : $email,
+		'email_subject'  => $subject,
+		'email_content'  => $content,
 	);
 
 	$customer_email_subject = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_customer_email_subject' );
@@ -87,13 +111,6 @@ function magic_cf_send_message( array $context = [] ) {
 		$headers
 	);
 
-	if ( ! $sent || is_wp_error( $sent ) ) {
-		// error sending email.
-		// we do not want to show these here,
-		// instead there is an add_action in the plugin.php
-		// $context['errors'][] = 'send_customer';
-	}
-
 	$team_email_subject = magic_get_option( MAGIC_CONTACT_FORM_SLUG . '_team_email_subject' );
 	$team_email_subject = Timber::compile_string( $customer_email_subject, $email_ctx );
 
@@ -106,13 +123,6 @@ function magic_cf_send_message( array $context = [] ) {
 		$team_email_content,
 		$headers
 	);
-
-	if ( ! $sent_to_team ) {
-		// error sending team email
-		// we do not want to show these here,
-		// instead there is an add_action in the plugin.php
-		// $context['errors'][] = 'send_team';
-	}
 
 	if ( empty( $context['errors'] ) ) {
 		$context['success'] = true;
