@@ -6,14 +6,27 @@
  * @license   GPL-2.0+
  */
 
+/**
+ * Enqueue contact form css file
+ */
 require_once 'styles/index.php';
+
+/**
+ * Add Message post type
+ */
 require_once 'post_type/message.php';
 
+/**
+ * Add Admin Dashboard
+ */
 if ( is_admin() ) {
 	require_once 'admin/dashboard.php';
 	require_once 'admin/requirements.php';
 }
 
+/**
+ * Add Contact Form Page templates to page templates
+ */
 add_action(
 	'plugins_loaded',
 	function () {
@@ -29,7 +42,7 @@ add_action(
 	}
 );
 
-// Load plugin text domain
+// Load plugin text domain.
 add_action(
 	'init',
 	function () {
@@ -41,6 +54,9 @@ add_action(
 	}
 );
 
+/**
+ * Filter From Name for emails to get valid form Confirmation name
+ */
 add_filter(
 	'wp_mail_from_name',
 	function ( $original_email_from ) {
@@ -48,6 +64,9 @@ add_filter(
 	}
 );
 
+/**
+ * Filter email address to get valid blog email address
+ */
 add_filter(
 	'wp_mail_from',
 	function ( $original_email_from ) {
