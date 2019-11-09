@@ -1,6 +1,6 @@
 <?php
 /**
- * User Management
+ * Contact Form
  *
  * @package   Magic-Contact-Form
  * @license   GPL-2.0+
@@ -20,25 +20,19 @@
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
-  die;
+	die;
 }
 
 define( 'MAGIC_CONTACT_FORM_SLUG', 'magic_cf' );
 define( 'MAGIC_CONTACT_FORM_PAGE_TEMPLATE', 'magic-contact-form-page.php' );
 define( 'MAGIC_CONTACT_FORM_POST_TYPE', 'magic_cf_message' );
+
+/**
+ * Nonce slug for sending email using the form
+ */
 define( 'MAGIC_CONTACT_FORM_SEND_ACTION', 'magic_cf_send' );
 
+/**
+ * Include the actual functionality
+ */
 require_once plugin_dir_path( __FILE__ ) . 'includes/plugin.php';
-
-// Register callback that is fired when the plugin is activated.
-register_activation_hook( __FILE__, function () {
-//  require_once 'includes/db/db.php';
-//  $db = new Magic_Appointment_DB;
-//  $db->create_table();
-
-  flush_rewrite_rules();
-} );
-
-register_deactivation_hook( __FILE__, function () {
-  flush_rewrite_rules();
-} );
