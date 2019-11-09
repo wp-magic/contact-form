@@ -21,7 +21,6 @@ require_once 'post_type/message.php';
  */
 if ( is_admin() ) {
 	require_once 'admin/dashboard.php';
-	require_once 'admin/requirements.php';
 }
 
 /**
