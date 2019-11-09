@@ -1,4 +1,4 @@
-## Magic User Admin Wordpress Plugin
+## Magic Contact Form Wordpress Plugin
 
 ### Description
 
@@ -14,6 +14,3 @@ redirects to itself and shows error messages
 
 ##### on success:
 redirects to itself or configurable value
-
-#### TODO:
-add message custom post type which mirrors sent emails
